@@ -1,6 +1,7 @@
 class Sudoku
   def define
-    puzzle = ["53467891.", "67.1953.8", "198342.67", "85976...3", "4..8.3..1", "71392...6", ".6....28.", "287419635", "345286179"]
+    # puzzle = ["53467891.", "67.1953.8", "198342.67", "85976...3", "4..8.3..1", "71392...6", ".6....28.", "287419635", "345286179"]
+    puzzle = ["53..7..1.", "6..195...", ".98....6.", "8...6...3", "4..8.3..1", "7...2...6", ".6....28.", "...419..5", "....8..79"]
     array = puzzle.join.split(//).map(&:to_i)
   end
 end
@@ -21,15 +22,15 @@ class Solver
 
         make_columns puzzle
         make_rows puzzle
+        make_blocks puzzle
 
-        allowed_digits = DIGITS - @columns[cell % 9] - @rows[cell / 9] - @blocks[cell/27] && @blocks[cell % 9]
+        allowed_digits = DIGITS - @columns[cell % 9] - @rows[cell / 9] - @blocks[3*((cell/9)/3)+((cell%9)/3)]
 
         puzzle[cell] = allowed_digits.shift
       end
     end
 
-    puts @blocks.inspect
-    # puts puzzle.inspect
+    puts puzzle.inspect
   end
 
   private
@@ -45,7 +46,8 @@ class Solver
     make_rows puzzle
     make_blocks puzzle
 
-    allowed_digits = DIGITS - @columns[cell % 9] - @rows[cell / 9] - @blocks[cell/27]
+    allowed_digits = DIGITS - @columns[cell % 9] - @rows[cell / 9] - @blocks[3*((cell/9)/3)+((cell%9)/3)]
+
     puzzle[cell] = allowed_digits[0]
     @cells << cell
   end
