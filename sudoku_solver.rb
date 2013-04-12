@@ -29,7 +29,7 @@ class Solver
     end
 
     puts @blocks.inspect
-    puts puzzle.inspect
+    # puts puzzle.inspect
   end
 
   private
@@ -45,7 +45,7 @@ class Solver
     make_rows puzzle
     make_blocks puzzle
 
-    allowed_digits = DIGITS - @columns[cell % 9] - @rows[cell / 9]
+    allowed_digits = DIGITS - @columns[cell % 9] - @rows[cell / 9] - @blocks[cell/27]
     puzzle[cell] = allowed_digits[0]
     @cells << cell
   end
@@ -62,8 +62,8 @@ class Solver
 
   def make_blocks puzzle
     @blocks = (0..8).map do |j|
-      3.times.inject([]) { |box, i| box << puzzle[9*i+j] }
-    end.each_slice(3).map(&:flatten)
+      (0..8).inject([]) { |box, i| box << puzzle[27*(j/3) + 3*(j%3) + (i%3) + 9*(i/3)] }
+    end
   end
 end
 
